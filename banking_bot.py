@@ -134,32 +134,114 @@ def main():
         layout="centered"
     )
     
-    # Title and header
+    # Professional banking color scheme CSS
     st.markdown("""
-    <h1 style='text-align: center; color: #004b87;'>🏦 HBDB Banking Bot</h1>
-    <p style='text-align: center; color: #666;'>Your Banking Assistant</p>
+    <style>
+    :root {
+        --primary-navy: #1a3a52;
+        --primary-blue: #003366;
+        --accent-gold: #D4AF37;
+        --light-gray: #F5F7FA;
+        --dark-gray: #2C3E50;
+        --text-dark: #1a1a1a;
+    }
+    
+    .main {
+        background-color: #F5F7FA;
+    }
+    
+    .stMarkdown h1 {
+        color: #003366 !important;
+        font-weight: 700;
+    }
+    
+    .stMarkdown h2 {
+        color: #1a3a52 !important;
+        font-weight: 600;
+    }
+    
+    .stMarkdown p {
+        color: #2C3E50 !important;
+    }
+    
+    .stButton > button {
+        background-color: #003366 !important;
+        color: white !important;
+        border: none !important;
+        font-weight: 600 !important;
+        transition: all 0.3s ease;
+    }
+    
+    .stButton > button:hover {
+        background-color: #D4AF37 !important;
+        color: #003366 !important;
+        font-weight: 600 !important;
+    }
+    
+    .stTextInput > div > div > input {
+        border: 2px solid #003366 !important;
+        border-radius: 8px !important;
+    }
+    
+    .stExpander {
+        border: 2px solid #D4AF37 !important;
+        border-radius: 8px !important;
+    }
+    
+    .stExpander > div:first-child {
+        background-color: #1a3a52 !important;
+        color: white !important;
+    }
+    
+    .stDivider {
+        border-top: 3px solid #D4AF37 !important;
+    }
+    
+    .chat-message {
+        border-radius: 8px;
+        padding: 12px;
+        margin: 8px 0;
+    }
+    </style>
     """, unsafe_allow_html=True)
     
-    st.divider()
+    # Title and header with professional styling
+    st.markdown("""
+    <div style='background: linear-gradient(135deg, #003366 0%, #1a3a52 100%); padding: 30px; border-radius: 10px; text-align: center; margin-bottom: 20px;'>
+        <h1 style='color: white; margin: 0; font-size: 2.5em;'>🏦 HBDB Banking Bot</h1>
+        <p style='color: #D4AF37; margin: 10px 0 0 0; font-size: 1.1em; font-weight: 500;'>Your Professional Banking Assistant</p>
+    </div>
+    """, unsafe_allow_html=True)
     
     # Initialize session state for conversation history
     if "conversation_history" not in st.session_state:
         st.session_state.conversation_history = []
     
-    # Display sample questions
-    with st.expander("📋 Sample Questions", expanded=False):
+    # Display sample questions with professional styling
+    with st.expander("📋 Sample Banking Questions"):
         st.markdown("""
+        <div style='color: #2C3E50;'>
+        
+        **Accounts & Services**
         - How do I open a savings account?
         - What is HBDB Premier?
+        - What banking services do you offer?
+        
+        **Account Management**
         - How do I reset my password?
+        - What are your account fees?
+        
+        **Products & Rates**
         - What are the current mortgage rates?
-        - What fees apply to my account?
-        """)
+        - What are your savings account rates?
+        
+        </div>
+        """, unsafe_allow_html=True)
     
-    st.divider()
+    st.markdown("---")
     
-    # Display conversation history
-    st.subheader("💬 Chat History")
+    # Display conversation history with professional styling
+    st.markdown("<h2 style='color: #003366;'>💬 Chat History</h2>", unsafe_allow_html=True)
     
     # Create a container for chat messages
     chat_container = st.container()
@@ -167,14 +249,14 @@ def main():
     with chat_container:
         for message in st.session_state.conversation_history:
             if message["role"] == "user":
-                st.chat_message("user").write(message["content"])
+                st.chat_message("user", avatar="👤").write(message["content"])
             else:
-                st.chat_message("assistant").write(message["content"])
+                st.chat_message("assistant", avatar="🏦").write(message["content"])
     
-    st.divider()
+    st.markdown("---")
     
-    # Input section
-    st.subheader("Ask a Question")
+    # Input section with professional styling
+    st.markdown("<h2 style='color: #003366;'>Ask a Question</h2>", unsafe_allow_html=True)
     
     col1, col2 = st.columns([4, 1])
     
@@ -186,7 +268,7 @@ def main():
         )
     
     with col2:
-        send_button = st.button("Send", use_container_width=True)
+        send_button = st.button("💬 Send", use_container_width=True)
     
     # Process user input
     if send_button and user_input.strip():
@@ -197,7 +279,7 @@ def main():
         })
         
         # Get bot response
-        with st.spinner("🤔 Thinking..."):
+        with st.spinner("🤔 Processing your request..."):
             response, _ = chat_with_bot(
                 user_input,
                 st.session_state.conversation_history
@@ -217,14 +299,16 @@ def main():
         st.session_state.conversation_history = []
         st.rerun()
     
-    st.divider()
+    st.markdown("---")
     
-    # Footer
+    # Footer with professional styling
     st.markdown("""
-    <p style='text-align: center; color: #999; font-size: 0.8em;'>
-    HBDB Banking Bot - Powered by Mistral AI<br>
-    For assistance, contact HBDB Customer Service
-    </p>
+    <div style='background: linear-gradient(135deg, #1a3a52 0%, #003366 100%); padding: 20px; border-radius: 10px; text-align: center; margin-top: 30px;'>
+        <p style='color: white; margin: 0; font-size: 0.9em;'>
+            🏦 <strong>HBDB Banking Bot</strong> - Powered by Mistral AI<br>
+            <span style='color: #D4AF37;'>For assistance, contact HBDB Customer Service</span>
+        </p>
+    </div>
     """, unsafe_allow_html=True)
 
 if __name__ == "__main__":

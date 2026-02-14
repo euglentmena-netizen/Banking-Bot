@@ -131,15 +131,16 @@ def main():
     st.set_page_config(
         page_title="HBDB Banking Bot",
         page_icon="🏦",
-        layout="centered"
+        layout="wide"
     )
     
-    # Professional banking color scheme CSS
+    # Professional banking color scheme with Tiffany Blue CSS
     st.markdown("""
     <style>
     :root {
         --primary-navy: #1a3a52;
         --primary-blue: #003366;
+        --tiffany-blue: #0ABAB5;
         --accent-gold: #D4AF37;
         --light-gray: #F5F7FA;
         --dark-gray: #2C3E50;
@@ -148,6 +149,48 @@ def main():
     
     .main {
         background-color: #F5F7FA;
+    }
+    
+    .sidebar .sidebar-content {
+        background: linear-gradient(180deg, #003366 0%, #1a3a52 100%);
+        padding: 20px;
+        border-radius: 0;
+    }
+    
+    .sidebar-logo {
+        text-align: center;
+        padding: 20px 0;
+        border-bottom: 3px solid #0ABAB5;
+        margin-bottom: 20px;
+    }
+    
+    .agent-card {
+        background: linear-gradient(135deg, #0ABAB5 0%, #00897B 100%);
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        color: white;
+        margin: 20px 0;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    .agent-name {
+        font-size: 1.3em;
+        font-weight: 700;
+        margin: 15px 0 10px 0;
+        color: white;
+    }
+    
+    .rating {
+        font-size: 1.8em;
+        margin: 10px 0;
+        letter-spacing: 2px;
+    }
+    
+    .rating-label {
+        font-size: 0.9em;
+        opacity: 0.9;
+        margin-bottom: 10px;
     }
     
     .stMarkdown h1 {
@@ -165,7 +208,7 @@ def main():
     }
     
     .stButton > button {
-        background-color: #003366 !important;
+        background-color: #0ABAB5 !important;
         color: white !important;
         border: none !important;
         font-weight: 600 !important;
@@ -179,37 +222,99 @@ def main():
     }
     
     .stTextInput > div > div > input {
-        border: 2px solid #003366 !important;
+        border: 2px solid #0ABAB5 !important;
         border-radius: 8px !important;
     }
     
     .stExpander {
-        border: 2px solid #D4AF37 !important;
+        border: 2px solid #0ABAB5 !important;
         border-radius: 8px !important;
     }
     
     .stExpander > div:first-child {
-        background-color: #1a3a52 !important;
+        background-color: #0ABAB5 !important;
         color: white !important;
     }
     
     .stDivider {
-        border-top: 3px solid #D4AF37 !important;
+        border-top: 3px solid #0ABAB5 !important;
     }
     
-    .chat-message {
-        border-radius: 8px;
-        padding: 12px;
-        margin: 8px 0;
+    .main-content {
+        padding: 20px;
     }
     </style>
     """, unsafe_allow_html=True)
     
-    # Title and header with professional styling
+    # Create sidebar with agent info and branding
+    with st.sidebar:
+        # Professional Banking Logo
+        st.markdown("""
+        <div style='background: linear-gradient(135deg, #0ABAB5 0%, #008B7F 100%); padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 15px;'>
+            <div style='font-size: 3.5em;'>🏛️</div>
+            <h2 style='color: white; margin: 10px 0 0 0; font-size: 1.3em;'>HBDB</h2>
+            <p style='color: white; margin: 5px 0 0 0; font-size: 0.85em;'>Banking Excellence</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("---")
+        
+        # Agent Information Card
+        st.markdown("""
+        <div style='background: linear-gradient(135deg, #0ABAB5 0%, #00A099 100%); padding: 20px; border-radius: 12px; text-align: center; color: white;'>
+            <div style='font-size: 3em; margin-bottom: 10px;'>👨‍💼</div>
+            <h3 style='margin: 10px 0; color: white; font-size: 1.3em;'>Mr Euglent Mena</h3>
+            <p style='margin: 5px 0; font-size: 0.95em; opacity: 0.95;'>Senior Banking Assistant</p>
+            
+            <div style='background: rgba(255,255,255,0.25); padding: 12px; border-radius: 8px; margin: 15px 0;'>
+                <p style='font-size: 0.85em; opacity: 0.95; margin-bottom: 8px;'>Client Satisfaction</p>
+                <div style='font-size: 1.5em; margin: 8px 0;'>⭐⭐⭐⭐⭐</div>
+                <p style='font-size: 0.9em; margin: 5px 0;'><strong>5.0 / 5.0 Rating</strong></p>
+            </div>
+            
+            <div style='font-size: 0.85em; margin-top: 15px; opacity: 0.9;'>
+                <p style='margin: 5px 0;'>✓ 24/7 Available</p>
+                <p style='margin: 5px 0;'>✓ Expert Support</p>
+                <p style='margin: 5px 0;'>✓ Secure & Trusted</p>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("---")
+        
+        # Quick Links
+        st.markdown("""
+        <p style='color: #0ABAB5; font-weight: 600; font-size: 0.95em; margin-bottom: 10px;'>Quick Navigation</p>
+        """, unsafe_allow_html=True)
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("🏠 Home", use_container_width=True):
+                st.rerun()
+        with col2:
+            if st.button("❓ FAQ", use_container_width=True):
+                st.info("Sample Questions section in main panel")
+        
+        st.markdown("---")
+        
+        st.markdown("""
+        <p style='color: #666; font-size: 0.8em; text-align: center; margin-top: 30px; opacity: 0.8;'>
+            © 2026 HBDB Banking<br>
+            Powered by Mistral AI
+        </p>
+        """, unsafe_allow_html=True)
+    
+    # Main content area
     st.markdown("""
-    <div style='background: linear-gradient(135deg, #003366 0%, #1a3a52 100%); padding: 30px; border-radius: 10px; text-align: center; margin-bottom: 20px;'>
-        <h1 style='color: white; margin: 0; font-size: 2.5em;'>🏦 HBDB Banking Bot</h1>
-        <p style='color: #D4AF37; margin: 10px 0 0 0; font-size: 1.1em; font-weight: 500;'>Your Professional Banking Assistant</p>
+    <div class='main-content'>
+    """, unsafe_allow_html=True)
+    
+    # Title and header with professional styling and Tiffany blue accent
+    st.markdown("""
+    <div style='background: linear-gradient(135deg, #003366 0%, #1a3a52 50%, #0ABAB5 100%); padding: 40px; border-radius: 15px; text-align: center; margin-bottom: 30px; box-shadow: 0 6px 15px rgba(0,0,0,0.15);'>
+        <h1 style='color: white; margin: 0; font-size: 2.8em; text-shadow: 2px 2px 4px rgba(0,0,0,0.2);'>🏦 HBDB Banking Bot</h1>
+        <p style='color: #D4AF37; margin: 15px 0 0 0; font-size: 1.2em; font-weight: 600;'>Your Professional Banking Assistant</p>
+        <p style='color: #E8F4F8; margin: 10px 0 0 0; font-size: 0.95em; opacity: 0.95;'>Assisted by Mr Euglent Mena ⭐ 5.0 Rating</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -241,17 +346,21 @@ def main():
     st.markdown("---")
     
     # Display conversation history with professional styling
-    st.markdown("<h2 style='color: #003366;'>💬 Chat History</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 style='color: #0ABAB5; display: flex; align-items: center;'>💬 Chat History</h2>", unsafe_allow_html=True)
     
     # Create a container for chat messages
     chat_container = st.container()
     
     with chat_container:
-        for message in st.session_state.conversation_history:
-            if message["role"] == "user":
-                st.chat_message("user", avatar="👤").write(message["content"])
-            else:
-                st.chat_message("assistant", avatar="🏦").write(message["content"])
+        if len(st.session_state.conversation_history) == 0:
+            st.info("👋 Start a conversation by asking a banking question below!")
+        else:
+            for message in st.session_state.conversation_history:
+                if message["role"] == "user":
+                    st.chat_message("user", avatar="👤").write(message["content"])
+                else:
+                    st.chat_message("assistant", avatar="🏦").write(message["content"])
+    
     
     st.markdown("---")
     
@@ -301,12 +410,15 @@ def main():
     
     st.markdown("---")
     
-    # Footer with professional styling
+    # Footer with professional styling and Tiffany blue accent
     st.markdown("""
-    <div style='background: linear-gradient(135deg, #1a3a52 0%, #003366 100%); padding: 20px; border-radius: 10px; text-align: center; margin-top: 30px;'>
-        <p style='color: white; margin: 0; font-size: 0.9em;'>
+    <div style='background: linear-gradient(135deg, #1a3a52 0%, #003366 50%, #0ABAB5 100%); padding: 25px; border-radius: 12px; text-align: center; margin-top: 30px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);'>
+        <p style='color: white; margin: 0; font-size: 0.95em; font-weight: 600;'>
             🏦 <strong>HBDB Banking Bot</strong> - Powered by Mistral AI<br>
-            <span style='color: #D4AF37;'>For assistance, contact HBDB Customer Service</span>
+            <span style='color: #D4AF37; display: block; margin-top: 10px;'>Assisted by Mr Euglent Mena ⭐ 5.0 / 5.0</span>
+        </p>
+        <p style='color: white; margin: 10px 0 0 0; font-size: 0.8em; opacity: 0.85;'>
+            For assistance, contact HBDB Customer Service
         </p>
     </div>
     """, unsafe_allow_html=True)

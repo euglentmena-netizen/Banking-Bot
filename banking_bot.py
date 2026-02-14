@@ -4,15 +4,15 @@ import streamlit as st
 
 # Initialize Mistral client
 API_KEY = os.getenv('MISTRAL_API_KEY', 'uZxN0pWyCAldrJweAW1G800rNoQbyy7G')
-DEMO_MODE = True
 client = None
 
-# Import Mistral but don't initialize yet
+# Import Mistral
 try:
     from mistralai import Mistral
+    # Initialize client with the API key
+    client = Mistral(api_key=API_KEY)
 except Exception as e:
-    DEMO_MODE = True
-    print(f"Using demo mode: {e}")
+    print(f"Mistral import error: {e}")
 
 # Load FAQ data from CSV
 def load_faqs(csv_file):
@@ -50,38 +50,11 @@ else:
 def chat_with_bot(user_message, conversation_history):
     """Send a message to the banking bot and get a response."""
     
-    # Demo mode responses
-    demo_responses = {
-        "hello": "Hello! Welcome to HBDB Banking. How can I assist you today?",
-        "hi": "Hi there! I'm your HBDB Banking Assistant. What can I help you with?",
-        "account": "We offer several account types including Savings, Checking, and Premier accounts. Each has unique benefits. Which one interests you?",
-        "rates": "Our current savings rates are competitive. For specific rates, please visit our website or contact our customer service team.",
-        "mortgage": "We offer flexible mortgage options. I'd be happy to provide information about our mortgage products and rates.",
-        "password": "To reset your password, please visit our login page and click 'Forgot Password'. Follow the instructions sent to your email.",
-        "services": "HBDB offers a full range of banking services including savings accounts, checking accounts, loans, mortgages, and investment services.",
-        "fees": "Our account fees are minimal. Different accounts have different fee structures. Would you like details on a specific account type?",
-    }
-    
     try:
-        if DEMO_MODE:
-            # Demo mode - provide helpful responses based on keywords
-            user_lower = user_message.lower()
-            
-            # Check for keywords in demo responses
-            for keyword, response in demo_responses.items():
-                if keyword in user_lower:
-                    return response, conversation_history
-            
-            # Default response
-            default_response = "Thank you for your question! As a demo, I'm providing sample responses. For a full experience, please provide a valid Mistral API key via the MISTRAL_API_KEY environment variable."
-            return default_response, conversation_history
-        
-        # Real API mode - initialize client on first use
-        global client
         if client is None:
-            client = Mistral(api_key=API_KEY)
+            return "Error: Mistral API client not initialized. Please check your API key.", conversation_history
         
-        # Real API mode
+        # System message with FAQ context
         system_message = f"""You are a helpful HBDB Banking Customer Service Bot. 
 Your role is to assist customers with banking-related questions and provide accurate information about HBDB services.
 
@@ -133,10 +106,6 @@ def main():
     <h1 style='text-align: center; color: #004b87;'>🏦 HBDB Banking Bot</h1>
     <p style='text-align: center; color: #666;'>Your Banking Assistant</p>
     """, unsafe_allow_html=True)
-    
-    # Show demo mode warning if needed
-    if DEMO_MODE:
-        st.warning("⚠️ Running in DEMO MODE - Using sample responses. For full AI capabilities, set MISTRAL_API_KEY environment variable.")
     
     st.divider()
     

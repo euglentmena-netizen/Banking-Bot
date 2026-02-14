@@ -266,10 +266,10 @@ def main():
             <h3 style='margin: 10px 0; color: white; font-size: 1.3em;'>Mr Euglent Mena</h3>
             <p style='margin: 5px 0; font-size: 0.95em; opacity: 0.95;'>Senior Banking Assistant</p>
             
-            <div style='background: rgba(255,255,255,0.25); padding: 12px; border-radius: 8px; margin: 15px 0;'>
-                <p style='font-size: 0.85em; opacity: 0.95; margin-bottom: 8px;'>Client Satisfaction</p>
-                <div style='font-size: 1.5em; margin: 8px 0;'>⭐⭐⭐⭐⭐</div>
-                <p style='font-size: 0.9em; margin: 5px 0;'><strong>5.0 / 5.0 Rating</strong></p>
+            <div style='background: rgba(255,255,255,0.25); padding: 15px; border-radius: 8px; margin: 15px 0;'>
+                <p style='font-size: 0.9em; opacity: 0.95; margin-bottom: 10px; font-weight: 600;'>Client Satisfaction</p>
+                <div style='font-size: 2em; margin: 10px 0; letter-spacing: 2px;'>⭐⭐⭐⭐⭐</div>
+                <p style='font-size: 0.9em; margin: 10px 0; font-weight: bold;'>5.0 / 5.0 Rating</p>
             </div>
             
             <div style='font-size: 0.85em; margin-top: 15px; opacity: 0.9;'>

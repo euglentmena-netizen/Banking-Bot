@@ -2,17 +2,36 @@ import csv
 import os
 import streamlit as st
 
-# Initialize Mistral client
-API_KEY = os.getenv('MISTRAL_API_KEY', 'uZxN0pWyCAldrJweAW1G800rNoQbyy7G')
-client = None
-
 # Import Mistral
-try:
-    from mistralai import Mistral
-    # Initialize client with the API key
-    client = Mistral(api_key=API_KEY)
-except Exception as e:
-    print(f"Mistral import error: {e}")
+from mistralai import Mistral
+
+# Initialize Mistral client with API key from environment
+API_KEY = os.getenv('MISTRAL_API_KEY', 'uZxN0pWyCAldrJweAW1G800rNoQbyy7G')
+
+# Initialize client lazily to avoid startup errors
+def get_client():
+    """Get or create the Mistral client."""
+    global _client
+    if '_client' not in globals():
+        try:
+            _client = Mistral(api_key=API_KEY)
+        except Exception as e:
+            _client = None
+    return _client
+
+# Demo responses fallback
+DEMO_RESPONSES = {
+    "hello": "Hello! Welcome to HBDB Banking. How can I assist you today?",
+    "hi": "Hi there! I'm your HBDB Banking Assistant. What can I help you with?",
+    "account": "We offer several account types including Savings, Checking, and Premier accounts. Each has unique benefits. Which one interests you?",
+    "rates": "Our current savings rates are competitive. For specific rates, please visit our website or contact our customer service team.",
+    "mortgage": "We offer flexible mortgage options. I'd be happy to provide information about our mortgage products and rates.",
+    "password": "To reset your password, please visit our login page and click 'Forgot Password'. Follow the instructions sent to your email.",
+    "services": "HBDB offers a full range of banking services including savings accounts, checking accounts, loans, mortgages, and investment services.",
+    "fees": "Our account fees are minimal. Different accounts have different fee structures. Would you like details on a specific account type?",
+}
+
+client = None  # Will be initialized on first use
 
 # Load FAQ data from CSV
 def load_faqs(csv_file):
@@ -51,11 +70,12 @@ def chat_with_bot(user_message, conversation_history):
     """Send a message to the banking bot and get a response."""
     
     try:
-        if client is None:
-            return "Error: Mistral API client not initialized. Please check your API key.", conversation_history
+        # Try to use Mistral API first
+        mistral_client = get_client()
         
-        # System message with FAQ context
-        system_message = f"""You are a helpful HBDB Banking Customer Service Bot. 
+        if mistral_client is not None:
+            # System message with FAQ context
+            system_message = f"""You are a helpful HBDB Banking Customer Service Bot. 
 Your role is to assist customers with banking-related questions and provide accurate information about HBDB services.
 
 Here is the knowledge base of frequently asked questions and answers:
@@ -70,26 +90,39 @@ Instructions:
 - Always mention relevant account features or services when appropriate
 - Never provide personal financial advice"""
 
-        # Prepare messages
-        messages = [{"role": "system", "content": system_message}] + conversation_history + [{"role": "user", "content": user_message}]
-        
-        # Call Mistral API
-        response = client.chat.complete(
-            model="mistral-large-latest",
-            messages=messages,
-            temperature=0.7,
-            max_tokens=1024
-        )
-        
-        # Extract assistant response
-        assistant_message = response.choices[0].message.content
-        
-        return assistant_message, conversation_history
+            # Prepare messages
+            messages = [{"role": "system", "content": system_message}] + conversation_history + [{"role": "user", "content": user_message}]
+            
+            # Call Mistral API
+            response = mistral_client.chat.complete(
+                model="mistral-large-latest",
+                messages=messages,
+                temperature=0.7,
+                max_tokens=1024
+            )
+            
+            # Extract assistant response
+            assistant_message = response.choices[0].message.content
+            return assistant_message, conversation_history
+        else:
+            # Fallback to demo mode
+            user_lower = user_message.lower()
+            for keyword, response in DEMO_RESPONSES.items():
+                if keyword in user_lower:
+                    return response, conversation_history
+            
+            default_response = "Thank you for your question! I'm currently using sample responses. Please try keywords like 'account', 'rates', 'mortgage', 'password', or 'fees' for more helpful information."
+            return default_response, conversation_history
         
     except Exception as e:
-        error_message = f"Error: {str(e)}"
-        print(error_message)
-        return error_message, conversation_history
+        # Fallback to demo mode on error
+        user_lower = user_message.lower()
+        for keyword, response in DEMO_RESPONSES.items():
+            if keyword in user_lower:
+                return response, conversation_history
+        
+        default_response = "Thank you for your question! I'm currently experiencing connectivity issues. Please try keywords like 'account', 'rates', 'mortgage', 'password', or 'fees'."
+        return default_response, conversation_history
 
 def main():
     """Main function to run the banking bot with Streamlit."""
